@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>YiClock v0.1 SVG</title>
+
+</head>
+<body>
+医表
+<div id="YiClocak">
+    <div id="yangLi"></div>
+    <div id="nongLi"></div>
+    <div id="wuYun"></div>
+    <div id="zhuQi"></div>
+    <div id="keQi"></div>
+    <div id="siTian"></div>
+    <div id="zaiQuan"></div>
+</div>
+
+<svg width='500px' height='500px' xmlns="http://www.w3.org/2000/svg">
+    <circle cx='250px' cy='250px' r='200px' style='fill:none; stroke:black; stroke-width:1pt;'></circle>
+</svg>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="YiClock.js"></script>
+<script type="text/javascript">
+    console.log("window.yiClock:", yiClock);
+    yiClock.start(function (YiClockTime) {
+        $("#yangLi").html(["阳历：", YiClockTime.year, "年", YiClockTime.this_day, YiClockTime.this_time].join(""));
+        $("#nongLi").html(["农历：", "Under developing..."].join(""));
+        $("#wuYun").html(["五运：", YiClockTime.wuyun].join(""));
+        $("#zhuQi").html(["主气：", YiClockTime.zhuqi].join(""));
+        $("#keQi").html(["客气：", YiClockTime.keqi].join(""));
+        $("#siTian").html(["司天：", YiClockTime.show_sitian].join(""));
+        $("#zaiQuan").html(["在泉：", YiClockTime.show_zaiquan].join(""));
+    });
+</script>
+</body>
+</html>
