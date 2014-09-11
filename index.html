@@ -1,39 +1,66 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>YiClock-SVG v0.1-alpha</title>
-    <meta http-equiv="Content-Type" content="text/html,charset=UTF-8">
+    <meta charset="utf-8"/>
+    <title>YiClock v0.1 alpha</title>
+    <link rel="stylesheet" type="text/css" href="clock.css"/>
 </head>
 <body>
-<h2>YiClock-SVG</h2>
+<h2>典鍾HTML版本</h2>
 
-<div id="YiClocak">
-    <div id="yangLi"></div>
-    <div id="nongLi"></div>
-    <div id="wuYun"></div>
-    <div id="zhuQi"></div>
-    <div id="keQi"></div>
-    <div id="siTian"></div>
-    <div id="zaiQuan"></div>
+<div id="YiClock">
+    <div id="theDate">
+        <div id="yangLi"></div>
+        <div id="nongLi"></div>
+    </div>
+
+    <div id="theYunQi">
+        <div id="wuYun"></div>
+        <div id="siTian" class="siqi"></div>
+        <div id="zhuQi" class="siqi"></div>
+        <div id="zaiQuan" class="siqi"></div>
+        <div id="keQi" class="siqi"></div>
+        <div id="siqiShow">
+            <div id="sitianRotation" class="siqiRotation"></div>
+            <div id="zaiquanRotation" class="siqiRotation"></div>
+            <div id="zhuqiRotation" class="siqiRotation"></div>
+            <div id="keqiRotation" class="siqiRotation"></div>
+        </div>
+    </div>
+    <div id="theClock">
+        <div class="center"></div>
+        <div id="yin-yang"></div>
+        <div id="shichenRotation"></div>
+        <div id="time0" class="time24">
+            <div class="timeNum">0</div>
+            <div class="dizhi">子</div>
+            <div class="zangfu">胆</div>
+        </div>
+        <div id="miaoRotation"></div>
+        <div id="hourRotation"></div>
+    </div>
 </div>
 
-<svg width='500px' height='500px' xmlns="http://www.w3.org/2000/svg">
-    <circle cx='250px' cy='250px' r='200px' style='fill:none; stroke:black; stroke-width:1pt;'></circle>
-
-</svg>
-
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="jquery-1.5.1.js"></script>
 <script type="text/javascript" src="YiClock.js"></script>
 <script type="text/javascript">
     console.log("window.yiClock:", yiClock);
-    yiClock.start(function (YiClockTime) {
-        $("#yangLi").html(["阳历：", YiClockTime.year, "年", YiClockTime.this_day, YiClockTime.this_time].join(""));
+    yiClock.drawTimes();
+    yiClock.start(function (yiClockTime) {
+        $("#yangLi").html(["阳历：", yiClockTime.year, "年", yiClockTime.this_day, yiClockTime.this_time].join(""));
         $("#nongLi").html(["农历：", "Under developing..."].join(""));
-        $("#wuYun").html(["五运：", YiClockTime.wuyun].join(""));
-        $("#zhuQi").html(["主气：", YiClockTime.zhuqi].join(""));
-        $("#keQi").html(["客气：", YiClockTime.keqi].join(""));
-        $("#siTian").html(["司天：", YiClockTime.show_sitian].join(""));
-        $("#zaiQuan").html(["在泉：", YiClockTime.show_zaiquan].join(""));
+        $("#wuYun").html(["五运：", yiClockTime.wuyun].join(""));
+        $("#zhuQi").html(yiClockTime.zhuqi);
+        $("#keQi").html(yiClockTime.keqi);
+        $("#siTian").html(yiClockTime.show_sitian);
+        $("#zaiQuan").html(yiClockTime.show_zaiquan);
+        $('#miaoRotation').css('transform', 'rotate(' + yiClockTime.miao._rotation + 'deg)');
+        $('#hourRotation').css('transform', 'rotate(' + yiClockTime.zhen._rotation + 'deg)');
+        $('#shichenRotation').css('transform', 'rotate(' + (yiClockTime._rotation + 90) + 'deg)');
+        $('#sitianRotation').css('transform', 'rotate(' + (yiClockTime.sitian_rotation + 180) + 'deg)');
+        $('#zaiquanRotation').css('transform', 'rotate(' + (yiClockTime.zaiquan_rotation + 180) + 'deg)');
+        $('#zhuqiRotation').css('transform', 'rotate(' + (yiClockTime.zhuqi_rotation + 180) + 'deg)');
+        $('#keqiRotation').css('transform', 'rotate(' + (yiClockTime.keqi_rotation + 180) + 'deg)');
     });
 </script>
 </body>
