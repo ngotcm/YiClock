@@ -2,20 +2,35 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>YiClock v0.1 alpha</title>
+    <title>YiClock v0.1</title>
     <link rel="stylesheet" type="text/css" href="clock.css"/>
 </head>
 <body>
 <h2>典鍾HTML版本</h2>
 
+<div id="debug">
+    <div id="yangLi"></div>
+    <div id="nongLi"></div>
+    <div class="sanjiao"></div>
+</div>
+
 <div id="YiClock">
     <div id="theDate">
-        <div id="yangLi"></div>
-        <div id="nongLi"></div>
+        <a href="//ngotcm.org/">
+            <div id="logo">典鍾網頁版
+                <div>ngotcm.org</div>
+            </div>
+        </a>
+
+        <div><span id="theYear">2014</span>年</div>
+        <div id="btYearLess" class="button"><<<</div>
+        <div id="btYearIncrease" class="button">>>></div>
+        <div id="btLinkNeijing" class="button">內經說解</div>
     </div>
 
     <div id="theYunQi">
         <div id="wuYun"></div>
+        <div id="theTime"></div>
         <div id="siTian" class="siqi"></div>
         <div id="zhuQi" class="siqi"></div>
         <div id="zaiQuan" class="siqi"></div>
@@ -31,6 +46,7 @@
         <div class="center"></div>
         <div id="yin-yang"></div>
         <div id="shichenRotation"></div>
+        <div class="maskLayer"></div>
         <div id="time0" class="time24">
             <div class="timeNum">0</div>
             <div class="dizhi">子</div>
@@ -49,7 +65,8 @@
     yiClock.start(function (yiClockTime) {
         $("#yangLi").html(["阳历：", yiClockTime.year, "年", yiClockTime.this_day, yiClockTime.this_time].join(""));
         $("#nongLi").html(["农历：", "Under developing..."].join(""));
-        $("#wuYun").html(["五运：", yiClockTime.wuyun].join(""));
+        $('#theTime').html([yiClockTime.this_day, yiClockTime.this_time].join('&nbsp;&nbsp;'));
+        $("#wuYun").html(yiClockTime.wuyun);
         $("#zhuQi").html(yiClockTime.zhuqi);
         $("#keQi").html(yiClockTime.keqi);
         $("#siTian").html(yiClockTime.show_sitian);

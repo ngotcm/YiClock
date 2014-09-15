@@ -5,17 +5,160 @@ body, div {
 
 #YiClock {
     position: relative;
+    display: block;
     margin: 0 auto;
     width: 500px;
+    height: 610px;
+    background-color: #FFF;
+    border: none;
     /*border: 1px solid #DDD;*/
 }
 
 #YiClock div#theClock, #YiClock div#theYunQi, #YiClock div#theDate {
     position: relative;
-    float: left;
     margin: 0 auto;
     width: 400px;
     clear: both;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#YiClock div#theDate {
+    margin: 0 auto;
+    background-color: #EEE;
+    width: 480px;
+    height: 50px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+#YiClock div#theYunQi {
+    width: 480px;
+}
+
+#theDate div {
+    float: left;
+    line-height: 50px;
+    font-size: 22px;
+}
+
+#theDate span#theYear {
+    margin: 0 .2em;
+    padding: .1em;
+    font-weight: 800;
+    color: red;
+    border: 1px solid #AAA;
+    border-radius: 5px;
+}
+
+#theDate .button {
+    margin: 10px .2em;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #999;
+    border-bottom: 2px solid #777;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: lightyellow;
+}
+
+#theDate div#logo {
+    position: relative;
+    float: right;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    border: 0px solid red;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: rgba(199, 199, 199, .5);
+    font-size: 24px;
+    line-height: 34px;
+    font-weight: 600;
+    color: darkred;
+    border-top-right-radius: 7px;
+}
+
+#theDate div#logo:hover {
+    background-color: lightskyblue;
+}
+
+#logo:hover:before {
+    position: absolute;
+    left: -18px;
+    top: 0px;
+    content: "";
+    width: 0;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    border: 9px solid lightskyblue;
+    border-top: 50px solid transparent;
+    border-left-color: transparent;
+    border-bottom: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#logo:before {
+    position: absolute;
+    left: -18px;
+    top: 0px;
+    content: "";
+    width: 0;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    border: 9px solid rgba(199, 199, 199, .5);
+    border-top: 50px solid transparent;
+    border-left-color: transparent;
+    border-bottom: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#logo:after {
+    position: absolute;
+    top: 30px;
+    left: -5px;
+    content: "";
+    width: 155px;
+    height: 1px;
+    background-color: red;
+}
+
+#logo div {
+    width: 100%;
+    border: none;
+    font-size: 12px;
+    line-height: 15px;
+    color: #888;
+}
+
+#nongLi {
+    display: none;
+}
+
+#wuYun, #theTime {
+    float: left;
+    color: firebrick;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 800;
+}
+
+#theTime {
+    color: #777;
+    margin-left: 2em;
+    font-size: 16px;
 }
 
 .siqi {
@@ -34,7 +177,7 @@ body, div {
     width: 100px;
     height: 0px;
     top: 20px;
-    left: 0px;
+    left: -3px;
 }
 
 #zaiQuan:before {
@@ -58,15 +201,15 @@ body, div {
 }
 
 #zhuQi, #keQi {
-    left: 250px;
+    left: 345px;
 }
 
 #siqiShow {
     position: absolute;
     width: 51px;
     height: 51px;
-    top: 30px;
-    left: 175px;
+    top: 20px;
+    left: 215px;
     border: 1px solid black;
     border-radius: 50%;
     -webkit-box-sizing: border-box;
@@ -129,7 +272,7 @@ body, div {
 
 #theClock {
     /*position: absolute;*/
-    top: 100px;
+    top: 90px;
     /*left: 40px;*/
     width: 400px;
     height: 400px;
@@ -137,6 +280,21 @@ body, div {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    border-radius: 50%;
+    transform: rotate(180deg);
+}
+
+#theClock:before, #theClock .maskLayer {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    left: -41px;
+    top: -41px;
+    border: 40px solid #eee;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
     border-radius: 50%;
 }
 
@@ -190,8 +348,11 @@ body, div {
     left: 200px;
     width: 1px;
     height: 200px;
-    border: none;
-    background-color: #444;
+    border: 0px solid transparent;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: rgba(68, 68, 68, .7);
     -webkit-transform-origin: 50% 100%;
     -moz-transform-origin: 50% 100%;
     -ms-transform-origin: 50% 100%;
@@ -200,13 +361,22 @@ body, div {
 }
 
 #miaoRotation:before {
-    content: "▲";
+    content: "";
     position: absolute;
-    top: -5px;
-    left: -4px;
-    font-size: 14px;
-    line-height: 14px;
-    color: red;
+    width: 1px;
+    height: 0;
+    margin: 0 auto;
+    top: 0;
+    left: -5px;
+    font-size: 0;
+    line-height: 0;
+    border: 5px solid transparent;
+    border-top: none;
+    border-bottom: 15px solid rgba(51, 51, 51, .8);
+}
+
+.sanjiao {
+
 }
 
 #hourRotation {
@@ -226,20 +396,19 @@ body, div {
 
 #shichenRotation {
     position: absolute;
-    top: 150px;
+    top: 140px;
     width: 0px;
-    left: 000px;
+    left: -20px;
     height: 0px;
-    border: 50px solid transparent;
-    border-left: 200px solid darkgreen;
-    border-right: 200px yellow;
-    border-radius: 10px;
+    border: 60px solid transparent;
+    border-left: 220px solid darkgreen;
+    border-right: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     opacity: .5;
     /*transform:rotate(190deg);*/
-    transform-origin: 200px 50px;
+    transform-origin: 100% 50%;
 }
 
 #yin-yang {
@@ -251,9 +420,9 @@ body, div {
     border-width: 2px 2px 50px 2px;
     border-radius: 100%;
     position: absolute;
-    top:150px;
-    left:150px;
-    transform:rotate(110deg);
+    top: 150px;
+    left: 150px;
+    transform: rotate(110deg);
 }
 
 #yin-yang:before {
@@ -275,7 +444,7 @@ body, div {
     left: 50%;
     background: #999;
     border: 18px solid #eee;
-    border-radius:100%;
+    border-radius: 100%;
     width: 12px;
     height: 12px;
 }
