@@ -82,8 +82,8 @@ var yiClock = (function (window) {
     var _NianYun = yearGan + yearZhi + "之岁 岁" + yearYun;
     yiClockTime.sitian_rotation = liluqiJiaodu[_zhuQi];
     yiClockTime.zaiquan_rotation = liluqiJiaodu[_KeQi];
-    console.log("yiClock.sitian_rotation = ", yiClockTime.sitian_rotation);//司天针的指向
-    console.log("yiClock.zaiquan_rotation = ", yiClockTime.zaiquan_rotation);//在泉针的指向
+    //console.log("yiClock.sitian_rotation = ", yiClockTime.sitian_rotation);//司天针的指向
+    //console.log("yiClock.zaiquan_rotation = ", yiClockTime.zaiquan_rotation);//在泉针的指向
     return [_NianYun, _zhuQi, _KeQi];
   }
 
@@ -135,7 +135,7 @@ var yiClock = (function (window) {
       }
     }
     yiClockTime.zhuqi_rotation = zhuQiJiaoDu[jiaoDuIndex];
-    console.log("yiClock.zhuqi_rotation =", yiClockTime.zhuqi_rotation);
+    //console.log("yiClock.zhuqi_rotation =", yiClockTime.zhuqi_rotation);
     return ([year, zhuQiArray[jiaoDuIndex]]);
   }
 
@@ -154,7 +154,7 @@ var yiClock = (function (window) {
       jiaoDuIndex = jiaoDuIndex - 6;
     }
     yiClockTime.keqi_rotation = keQiJiaoDu[jiaoDuIndex];
-    console.log("yiClock.keqi_rotation = ", yiClockTime.keqi_rotation);
+    //console.log("yiClock.keqi_rotation = ", yiClockTime.keqi_rotation);
     return keQiArray[jiaoDuIndex];
   }
 
@@ -162,7 +162,7 @@ var yiClock = (function (window) {
   var yiClock = {};
 
   yiClock.start = function (cb) {
-    console.log("Clock started.");
+    //console.log("Clock started.");
     YiClock();
     cb(yiClockTime);
     window.setInterval(function () {
@@ -181,7 +181,8 @@ var yiClock = (function (window) {
     var aTime = $('#time0', '#theClock');
     var theClock = $('#theClock');
     for (var i = 1; i < 24; i++) {
-      var nextTime = aTime.clone().attr('id', 'time' + i).css('transform', 'rotate(' + 360 / 24 * i + 'deg)');
+      var rotation = 'rotate(' + 360 / 24 * i + 'deg)';
+      var nextTime = aTime.clone().attr('id', 'time' + i).css({'-webkit-transform': rotation, 'transform': rotation});
       nextTime.children('div.timeNum').html(i + 0);
       if (i % 2) {
         $('.dizhi', nextTime).remove();
@@ -198,12 +199,3 @@ var yiClock = (function (window) {
 
   return yiClock;
 })(window);
-
-
-
-
-
-
-
-
-

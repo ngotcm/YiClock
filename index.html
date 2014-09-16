@@ -3,17 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <title>YiClock v0.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <link rel="stylesheet" type="text/css" href="clock.css"/>
 </head>
 <body>
-<h2>典鍾HTML版本</h2>
-
-<div id="debug">
-    <div id="yangLi"></div>
-    <div id="nongLi"></div>
-    <div class="sanjiao"></div>
-</div>
-
 <div id="YiClock">
     <div id="theDate">
         <a href="//ngotcm.org/">
@@ -60,25 +55,40 @@
 <script type="text/javascript" src="jquery-1.5.1.js"></script>
 <script type="text/javascript" src="YiClock.js"></script>
 <script type="text/javascript">
-    console.log("window.yiClock:", yiClock);
+    //console.log("window.yiClock:", yiClock);
+    function rotation(attr, deg) {
+        var result = {};
+
+        result['-webkit-' + attr] = deg;
+        result['-moz-' + attr] = deg;
+        result[attr] = deg;
+
+        return result;
+    }
+
     yiClock.drawTimes();
     yiClock.start(function (yiClockTime) {
-        $("#yangLi").html(["阳历：", yiClockTime.year, "年", yiClockTime.this_day, yiClockTime.this_time].join(""));
-        $("#nongLi").html(["农历：", "Under developing..."].join(""));
         $('#theTime').html([yiClockTime.this_day, yiClockTime.this_time].join('&nbsp;&nbsp;'));
         $("#wuYun").html(yiClockTime.wuyun);
         $("#zhuQi").html(yiClockTime.zhuqi);
         $("#keQi").html(yiClockTime.keqi);
         $("#siTian").html(yiClockTime.show_sitian);
         $("#zaiQuan").html(yiClockTime.show_zaiquan);
-        $('#miaoRotation').css('transform', 'rotate(' + yiClockTime.miao._rotation + 'deg)');
-        $('#hourRotation').css('transform', 'rotate(' + yiClockTime.zhen._rotation + 'deg)');
-        $('#shichenRotation').css('transform', 'rotate(' + (yiClockTime._rotation + 90) + 'deg)');
-        $('#sitianRotation').css('transform', 'rotate(' + (yiClockTime.sitian_rotation + 180) + 'deg)');
-        $('#zaiquanRotation').css('transform', 'rotate(' + (yiClockTime.zaiquan_rotation + 180) + 'deg)');
-        $('#zhuqiRotation').css('transform', 'rotate(' + (yiClockTime.zhuqi_rotation + 180) + 'deg)');
-        $('#keqiRotation').css('transform', 'rotate(' + (yiClockTime.keqi_rotation + 180) + 'deg)');
+        $('#miaoRotation').css(rotation('transform', 'rotate(' + yiClockTime.miao._rotation + 'deg)'));
+        //$('#miaoRotation').css('transform', 'rotate(' + yiClockTime.miao._rotation + 'deg)');
+        $('#hourRotation').css(rotation('transform', 'rotate(' + yiClockTime.zhen._rotation + 'deg)'));
+        $('#shichenRotation').css(rotation('transform', 'rotate(' + (yiClockTime._rotation + 90) + 'deg)'));
+        $('#sitianRotation').css(rotation('transform', 'rotate(' + (yiClockTime.sitian_rotation + 180) + 'deg)'));
+        $('#zaiquanRotation').css(rotation('transform', 'rotate(' + (yiClockTime.zaiquan_rotation + 180) + 'deg)'));
+        $('#zhuqiRotation').css(rotation('transform', 'rotate(' + (yiClockTime.zhuqi_rotation + 180) + 'deg)'));
+        $('#keqiRotation').css(rotation('transform', 'rotate(' + (yiClockTime.keqi_rotation + 180) + 'deg)'));
     });
+    window.onload = function () {
+        window.scrollbars.scrollTop = 1;
+        setTimeout(function () {
+            window.scrollTo(0, 1);
+        }, 0);
+    };
 </script>
 </body>
 </html>
