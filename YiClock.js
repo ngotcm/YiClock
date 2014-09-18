@@ -8,7 +8,6 @@ var yiClock = (function (window) {
   var dizhiNames = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
   var nianyunNames = ["土太过", "金不及", "水太过", "木不及", "火太过", "土不及", "金太过", "水不及", "木太过", "火不及"];
   var zhuqiKeqiNames = ["少阴君火", "太阴湿土", "少阳相火", "阳明燥金", "太阳寒水", "厥阴风木", "少阴君火", "太阴湿土", "少阳相火", "阳明燥金", "太阳寒水", "厥阴风木"];
-  var _loc13 = ["厥阴风木", "少阴君火", "少阳相火", "太阴湿土", "阳明燥金", "太阳寒水"];
   var liluqiJiaodu = {"厥阴风木": 60, "少阴君火": 120, "少阳相火": 180, "太阴湿土": 240, "阳明燥金": 300, "太阳寒水": 0};
 
   var zhuQiArray = ["厥阴风木", "少阴君火", "少阳相火", "太阴湿土", "阳明燥金", "太阳寒水"];
@@ -21,12 +20,32 @@ var yiClock = (function (window) {
   var keQiJiaoDu = [180, 300, 0, 60, 120, 240];
 
   var zangfuNames = ['胆', '肝', '肺', '大肠', '胃', '脾', '心', '小肠', '膀胱', '肾', '心包', '三焦'];
+  var jingluoNames = ['足少阳', '足厥阴', '手太阴', '手阳明', '足阳明', '足太阴', '手少阴', '手太阳', '足太阳', '足少阴', '手厥阴', '手少阳'];
+  var houtianBaguaNames = ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑'];
+  var xiantianBaguaNames = ['乾', '巽', '坎', '艮', '坤', '震', '离', '兑'];
 
   var yiClockTime = {};
   yiClockTime.zhen = {};
   yiClockTime.miao = {};
 
   var calculated = false;
+
+  function getYunqi(year, month, day) {
+    yiClockTime.tmpYear = year;
+    var getArr = getZhuQi(year, month, day);
+    var nowYear = getArr[0];
+    var nowZhuQi = getArr[1];
+    yiClockTime.zhuqi = "主气 " + nowZhuQi;
+    var getyun = nianyun(nowYear);
+    var nowsitian = getyun[1];
+    var nowzaiquan = getyun[2];
+    yiClockTime.wuyun = getyun[0];
+    yiClockTime.show_sitian = nowsitian + " 司天";
+    yiClockTime.show_zaiquan = nowzaiquan + " 在泉";
+    var nowkeqi = getKeQi(nowZhuQi, nowsitian);
+    yiClockTime.keqi = "客气 " + nowkeqi;
+    calculated = true;
+  }
 
   /**
    * YiClock generate
@@ -51,19 +70,7 @@ var yiClock = (function (window) {
     yiClockTime.this_day = month + "月" + day + "日";
     yiClockTime.this_time = hour + ":" + minute + ":" + second;
     if (!calculated) {
-      var getArr = getZhuQi(year, month, day);
-      var nowYear = getArr[0];
-      var nowZhuQi = getArr[1];
-      yiClockTime.zhuqi = "主气 " + nowZhuQi;
-      var getyun = nianyun(nowYear);
-      var nowsitian = getyun[1];
-      var nowzaiquan = getyun[2];
-      yiClockTime.wuyun = getyun[0];
-      yiClockTime.show_sitian = nowsitian + " 司天";
-      yiClockTime.show_zaiquan = nowzaiquan + " 在泉";
-      var nowkeqi = getKeQi(nowZhuQi, nowsitian);
-      yiClockTime.keqi = "客气 " + nowkeqi;
-      calculated = true;
+      getYunqi(year, month, day);
     }
   }
 
@@ -177,7 +184,7 @@ var yiClock = (function (window) {
     return intTime > 9 ? "" + intTime : "0" + intTime;
   };
 
-  yiClock.drawTimes = function () {
+  yiClock.initClock = function (cb) {
     var aTime = $('#time0', '#theClock');
     var theClock = $('#theClock');
     for (var i = 1; i < 24; i++) {
@@ -193,6 +200,15 @@ var yiClock = (function (window) {
       }
       theClock.append(nextTime);
     }
+
+    YiClock();
+    cb(yiClockTime);
+  };
+
+  yiClock.changeYear = function (num, cb) {
+    var tmpDate = new Date;
+    getYunqi(yiClockTime.tmpYear + num, fTime(tmpDate.getMonth() + 1), fTime(tmpDate.getDate()));
+    cb(yiClockTime);
   };
 
   window.yiClock = window.$y = yiClock;
