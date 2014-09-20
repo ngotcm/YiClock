@@ -21,8 +21,8 @@ var yiClock = (function (window) {
 
   var zangfuNames = ['胆', '肝', '肺', '大肠', '胃', '脾', '心', '小肠', '膀胱', '肾', '心包', '三焦'];
   var jingluoNames = ['足少阳', '足厥阴', '手太阴', '手阳明', '足阳明', '足太阴', '手少阴', '手太阳', '足太阳', '足少阴', '手厥阴', '手少阳'];
-  var houtianBaguaNames = ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑'];
   var xiantianBaguaNames = ['乾', '巽', '坎', '艮', '坤', '震', '离', '兑'];
+  var houtianBaguaNames = ['离', '坤', '兑', '乾', '坎', '艮', '震', '巽'];
 
   var yiClockTime = {};
   yiClockTime.zhen = {};
@@ -194,9 +194,19 @@ var yiClock = (function (window) {
       if (i % 2) {
         $('.dizhi', nextTime).remove();
         $('.zangfu', nextTime).remove();
+        $('.jingluo', nextTime).remove();
       } else {
-        $('.dizhi', nextTime).text(dizhiNames[i / 2]);
-        $('.zangfu', nextTime).text(zangfuNames[i / 2]);
+        var number = (i / 2);
+        $('.dizhi', nextTime).text(dizhiNames[ number]);
+        $('.zangfu', nextTime).text(zangfuNames[number]);
+        $('.jingluo', nextTime).text(jingluoNames[number]);
+      }
+      if (i % 3) {
+        $('.bagua', nextTime).remove();
+      } else {
+        var bgIndex = ((i / 3 + 4) % 8);
+        $('.bagua .x', nextTime).text(xiantianBaguaNames[bgIndex]);
+        $('.bagua .h', nextTime).text(houtianBaguaNames[bgIndex]);
       }
       theClock.append(nextTime);
     }
