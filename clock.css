@@ -285,7 +285,7 @@ a {
 
 #theClock {
     /*position: absolute;*/
-    top: 100px;
+    top: 130px;
     /*left: 40px;*/
     width: 400px;
     height: 400px;
@@ -349,13 +349,39 @@ a {
 
 #theClock .time24 .dizhi {
     position: relative;
-    top: 5px;
+
+    top: 15px;
+    font-size:1.4em;
 }
 
 #theClock .time24 .zangfu {
     position: relative;
+    font-size:1.2em;
     color: lightskyblue;
-    top: 5px;
+    top: 15px;
+}
+
+#theClock .time24 .jingluo {
+    position: absolute;
+    top: -18px;
+    left: -.5em;
+    width: 3.3em;
+    color: #008;
+    font-size: 1.1em;
+}
+#theClock .time24 .bagua {
+    position:absolute;
+    top:-55px;
+    left:-15px;
+    width:70px;
+    height:30px;
+    /*border:1px solid red;*/
+    font-size:2em;
+    color:darkred;
+}
+#theClock .time24 .bagua span.h{
+    font-size:.8em;
+    color:#888;
 }
 
 #miaoRotation {
