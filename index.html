@@ -10,7 +10,7 @@
         var scale = windowWidth / appWidth;
         console.log('scale:', scale);
 
-        var metaScale = '<meta name="viewport" content="width=device-width,initial-scale=' + scale + ', maximum-scale=1.0">';
+        var metaScale = '<meta name="viewport" content="width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + '">';
         console.log(metaScale);
         document.writeln(metaScale);
     </script>
@@ -28,8 +28,8 @@
             </div>
         </a>
 
-        <div><span id="theYear">2014</span>年</div>
         <div id="btYearLess" class="button"><<<</div>
+        <div><span id="theYear">2014</span>年</div>
         <div id="btYearIncrease" class="button">>>></div>
         <div id="btLinkNeijing" class="button">內經說解</div>
     </div>
