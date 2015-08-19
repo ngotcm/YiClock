@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>YiClock v0.2</title>
+    <meta name="keywords" content="riot,clock">
+    <script>
+        var appWidth = 550;
+        var windowWidth = screen.availWidth;
+
+        var scale = windowWidth / appWidth;
+        console.log('scale:', scale);
+
+        var metaScale = '<meta name="viewport" content="width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + '">';
+        console.log(metaScale);
+        document.writeln(metaScale);
+    </script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link href="clock128.png" rel="shortcut icon" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="clock.css"/>
+</head>
+<body>
+<yi-clock></yi-clock>
+<script type="text/javascript" src="riot+compiler.min.js"></script>
+<script type="text/javascript" src="YiClock.js"></script>
+<script type="riot/tag" src="tags/yi-clock.jsx"></script>
+<script type="text/javascript">
+    riot.mount('yi-clock', {title: 'YiClock', yiClockData: $y.initClockModule()});
+</script>
+</body>
+</html>

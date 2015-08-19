@@ -63,6 +63,9 @@ var yiClock = (function (window) {
     yiClockTime._rotation = 30 * parseInt((shiChen + 15) / 30, 10);
     yiClockTime.zhen._rotation = shiChen;
     yiClockTime.miao._rotation = second * 6;
+    yiClockTime.miao_rotation = second * 6;
+    yiClockTime.zhen_rotation = shiChen;
+    yiClockTime.shichen_rotation = 30 * parseInt((shiChen + 15) / 30, 10) + 90;
     month = fTime(month);
     day = fTime(day);
     minute = fTime(minute);
@@ -167,14 +170,18 @@ var yiClock = (function (window) {
 
 
   var yiClock = {};
+  //var count = 0;
 
   yiClock.start = function (cb) {
-    //console.log("Clock started.");
+    console.log("Clock started.");
     YiClock();
-    cb(yiClockTime);
-    window.setInterval(function () {
+    cb && cb(yiClockTime);
+    var interval = window.setInterval(function () {
       YiClock();
-      cb(yiClockTime);
+      //count += 1;
+      //if (count > 5) clearInterval(interval);
+      //console.log('yiClockTime:', yiClockTime);
+      cb && cb(yiClockTime);
     }, 1000)
   };
 
@@ -182,6 +189,31 @@ var yiClock = (function (window) {
   //format time to,like "02"
   var fTime = function (intTime) {
     return intTime > 9 ? "" + intTime : "0" + intTime;
+  };
+
+  yiClock.initClockModule = function () {
+    YiClock();
+    var clock = [];
+    for (var i = 0; i < 24; i++) {
+      var shichen = {id: i , rotateV: 360 / 24 * i};
+      if (i % 2 === 0) {
+        shichen.dizhi = dizhiNames[i / 2];
+        shichen.zangfu = zangfuNames[i / 2];
+        shichen.jingluo = jingluoNames[i / 2];
+      }
+
+      if (i % 3 === 0) {
+        shichen.baguaX = xiantianBaguaNames[(i / 3 + 4) % 8]
+        shichen.baguaH = houtianBaguaNames[(i / 3 + 4) % 8]
+      }
+
+      clock.push(shichen);
+    }
+
+    yiClockTime.clock = clock;
+
+    //console.log('shichen ', clock);
+    return yiClockTime;
   };
 
   yiClock.initClock = function (cb) {
@@ -197,7 +229,7 @@ var yiClock = (function (window) {
         $('.jingluo', nextTime).remove();
       } else {
         var number = (i / 2);
-        $('.dizhi', nextTime).text(dizhiNames[ number]);
+        $('.dizhi', nextTime).text(dizhiNames[number]);
         $('.zangfu', nextTime).text(zangfuNames[number]);
         $('.jingluo', nextTime).text(jingluoNames[number]);
       }
