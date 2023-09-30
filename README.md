@@ -3,4 +3,4 @@
 
 ##参考：
    *  典钟： http://mst1739.com/yidao/
-   *  易易时钟： http://www.eesoftware.com/
+   *  ~~易易时钟： http://www.eesoftware.com/~~
