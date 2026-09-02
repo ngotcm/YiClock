@@ -1,16 +1,39 @@
+/* ============================================================
+   YiClock 中式淡雅样式（宣纸 · 墨色 · 朱砂）
+   ------------------------------------------------------------
+   供 index.html（jQuery 版）与 index_riotjs.html（Riot 版）共用。
+   几何参数沿用旧版 clock.css（表盘 400x400、transform-origin、
+   定位数值等），视觉为宣纸底 + 墨色 + 朱砂的中式配色。
+   SVG 版（index_svg.html）使用 yi-clock-svg.css。
+   ============================================================ */
+
+:root {
+    /* 色板 */
+    --paper: #f6f1e4;        /* 宣纸底 */
+    --card: #fbf8ef;         /* 米白卡片 */
+    --ink: #2e2a26;          /* 墨色正文 */
+    --ink-soft: #6b645c;     /* 次要墨灰 */
+    --cinnabar: #a63f36;     /* 朱砂 */
+    --indigo: #4a5d6b;       /* 黛蓝 */
+    --pine: #5d7052;         /* 松绿 */
+    --lotus: #8a6d7f;        /* 藕荷 */
+    --slate: #5a6b66;        /* 青灰（经络） */
+    --ring: #efe8d6;         /* 表盘外圈环浅色 */
+    --line: rgba(46, 42, 38, .22);  /* 通用细墨线描边 */
+}
+
 body {
-    -webkit-user-select: none;
+    user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-touch-callout: none;
-    -webkit-webkit-outline: none;
-    -webkit-mini-width:550px;
-    min-width:550px;
+    min-width: 600px;
+    background-color: var(--paper);
+    font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", serif;
 }
 
 body, div {
     margin: 0;
     padding: 0;
-    -webkit-transform: translate3d(0, 0, 0);
 }
 
 a {
@@ -21,11 +44,12 @@ a {
     position: relative;
     display: block;
     margin: 1em auto;
-    width: 500px;
+    width: 560px;
     height: 730px;
-    background-color: #FFF;
-    border: none;
-    /*border: 1px solid #DDD;*/
+    background-color: var(--card);
+    border-radius: 8px;
+    /* 细墨线边框（box-shadow 实现，不占布局）+ 淡阴影 */
+    box-shadow: 0 0 0 1px var(--line), 0 4px 16px rgba(46, 42, 38, .12);
 }
 
 #YiClock div#theClock, #YiClock div#theYunQi, #YiClock div#theDate {
@@ -39,11 +63,15 @@ a {
 
 #YiClock div#theDate {
     margin: 0 auto;
-    background-color: #EEE;
-    width: 480px;
+    background-color: var(--card);
+    width: 560px;
     height: 50px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    /* 仅底部一条分隔细线，其余三边与卡片边框重合 */
+    box-shadow: inset 0 -1px 0 var(--line);
 }
 
 #YiClock div#theYunQi {
@@ -61,8 +89,8 @@ a {
     margin: 0 .2em;
     padding: .1em;
     font-weight: 800;
-    color: red;
-    border: 1px solid #AAA;
+    color: var(--cinnabar);
+    border: 1px solid rgba(166, 63, 54, .45);
     border-radius: 5px;
 }
 
@@ -70,84 +98,35 @@ a {
     margin: 10px .2em;
     height: 30px;
     line-height: 30px;
-    border: 1px solid #999;
-    border-bottom: 2px solid #777;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
+    border: 1px solid rgba(46, 42, 38, .35);
+    border-bottom: 2px solid rgba(46, 42, 38, .5);
     box-sizing: border-box;
     cursor: pointer;
 }
 
 .button:hover {
-    background-color: lightyellow;
+    /* 淡朱砂底 */
+    background-color: rgba(166, 63, 54, .08);
 }
 
+/* 朱砂印章式 logo（不实现旧版的 :before 三角与 :after 红线） */
 #theDate div#logo {
     position: relative;
     float: right;
     width: 150px;
     height: 50px;
     text-align: center;
-    border: 0px solid red;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: rgba(199, 199, 199, .5);
+    background-color: var(--cinnabar);
     font-size: 24px;
     line-height: 34px;
     font-weight: 600;
-    color: darkred;
-    border-top-right-radius: 7px;
+    color: var(--paper);
+    border-top-right-radius: 8px;
 }
 
 #theDate div#logo:hover {
-    background-color: lightskyblue;
-}
-
-#logo:hover:before {
-    position: absolute;
-    left: -18px;
-    top: 0px;
-    content: "";
-    width: 0;
-    height: 0;
-    line-height: 0;
-    font-size: 0;
-    border: 9px solid lightskyblue;
-    border-top: 50px solid transparent;
-    border-left-color: transparent;
-    border-bottom: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-#logo:before {
-    position: absolute;
-    left: -18px;
-    top: 0px;
-    content: "";
-    width: 0;
-    height: 0;
-    line-height: 0;
-    font-size: 0;
-    border: 9px solid rgba(199, 199, 199, .5);
-    border-top: 50px solid transparent;
-    border-left-color: transparent;
-    border-bottom: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-#logo:after {
-    position: absolute;
-    top: 30px;
-    left: -5px;
-    content: "";
-    width: 155px;
-    height: 1px;
-    background-color: red;
+    background-color: #94392f;
 }
 
 #logo div {
@@ -155,30 +134,25 @@ a {
     border: none;
     font-size: 12px;
     line-height: 15px;
-    color: #888;
-}
-
-#nongLi {
-    display: none;
+    color: rgba(246, 241, 228, .8);
 }
 
 #wuYun, #theTime {
     float: left;
-    color: firebrick;
+    color: var(--ink);
     font-size: 18px;
     line-height: 22px;
     font-weight: 800;
 }
 
 #theTime {
-    color: #777;
+    color: var(--ink-soft);
     margin-left: 2em;
     font-size: 16px;
 }
 
 .siqi {
     position: absolute;
-    float: left;
     top: 45px;
     left: 40px;
 }
@@ -187,7 +161,7 @@ a {
     content: "";
     position: absolute;
     font-size: 0;
-    border: 2px solid firebrick;
+    border: 2px solid var(--cinnabar);
 
     width: 100px;
     height: 0px;
@@ -196,19 +170,15 @@ a {
 }
 
 #zaiQuan:before {
-    border-color: deepskyblue;
+    border-color: var(--indigo);
 }
 
 #zhuQi:before {
-    border-color: orchid;
+    border-color: var(--lotus);
 }
 
 #keQi:before {
-    border-color: forestgreen;
-}
-
-#zhuQi {
-
+    border-color: var(--pine);
 }
 
 #keQi, #zaiQuan {
@@ -225,10 +195,8 @@ a {
     height: 51px;
     top: 50px;
     left: 215px;
-    border: 1px solid black;
+    border: 1px solid rgba(46, 42, 38, .55);
     border-radius: 50%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -240,11 +208,11 @@ a {
     line-height: 0;
     width: 1px;
     height: 51px;
-    background-color: #CCC;
+    /* 十字线：暖浅灰 */
+    background-color: #d6d0c2;
 }
 
 #siqiShow:after {
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 
@@ -254,11 +222,7 @@ a {
     top: 3px;
     width: 1px;
     height: 22px;
-    background: #000;
-    -webkit-transform-origin: 50% 100%;
-    -moz-transform-origin: 50% 100%;
-    -ms-transform-origin: 50% 100%;
-    -o-transform-origin: 50% 100%;
+    background: var(--ink);
     transform-origin: 50% 100%;
 }
 
@@ -269,35 +233,30 @@ a {
     top: -8px;
     width: 8px;
     height: 8px;
-    background-color: firebrick;
+    background-color: var(--cinnabar);
     border-radius: 50%;
     opacity: .7;
 }
 
 #siqiShow #zaiquanRotation:before {
-    background-color: deepskyblue
+    background-color: var(--indigo)
 }
 
 #siqiShow #zhuqiRotation:before {
-    background-color: orchid
+    background-color: var(--lotus)
 }
 
 #siqiShow #keqiRotation:before {
-    background-color: forestgreen
+    background-color: var(--pine)
 }
 
 #theClock {
-    /*position: absolute;*/
     top: 160px;
-    /*left: 40px;*/
     width: 400px;
     height: 400px;
-    border: 1px solid black;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
+    border: 1px solid var(--ink);
     box-sizing: border-box;
     border-radius: 50%;
-    -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
 }
 
@@ -308,9 +267,7 @@ a {
     height: 400px;
     left: -41px;
     top: -41px;
-    border: 40px solid #eee;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
+    border: 40px solid var(--ring);
     box-sizing: content-box;
     border-radius: 50%;
 }
@@ -321,14 +278,9 @@ a {
     height: 0;
     left: 200px;
     top: 200px;
-    border: 4px solid red;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
+    border: 4px solid var(--cinnabar);
     box-sizing: border-box;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
     border-radius: 50%;
-    -webkit-transform: translate3d(-4px, -4px, -4px);
     transform: translate3d(-4px, -4px, -4px);
 }
 
@@ -338,15 +290,8 @@ a {
     top: -20px;
     width: 40px;
     height: 220px;
-    border: 0px solid red;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     text-align: center;
-    -webkit-transform-origin: 50% 100%;
-    -moz-transform-origin: 50% 100%;
-    -ms-transform-origin: 50% 100%;
-    -o-transform-origin: 50% 100%;
     transform-origin: 50% 100%;
 }
 
@@ -355,12 +300,14 @@ a {
 
     top: 15px;
     font-size:1.4em;
+    color: var(--ink);
+    font-weight: 700;
 }
 
 #theClock .time24 .zangfu {
     position: relative;
     font-size:1.2em;
-    color: lightskyblue;
+    color: var(--indigo);
     top: 15px;
 }
 
@@ -369,7 +316,7 @@ a {
     top: -18px;
     left: -.5em;
     width: 3.3em;
-    color: #008;
+    color: var(--slate);
     font-size: 1.1em;
 }
 #theClock .time24 .bagua {
@@ -378,13 +325,12 @@ a {
     left:-15px;
     width:70px;
     height:30px;
-    /*border:1px solid red;*/
     font-size:2em;
-    color:darkred;
+    color: var(--cinnabar);
 }
 #theClock .time24 .bagua span.h{
     font-size:.8em;
-    color:#888;
+    color: var(--ink-soft);
 }
 
 #miaoRotation {
@@ -392,15 +338,8 @@ a {
     left: 200px;
     width: 1px;
     height: 200px;
-    border: 0px solid transparent;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: rgba(68, 68, 68, .7);
-    -webkit-transform-origin: 50% 100%;
-    -moz-transform-origin: 50% 100%;
-    -ms-transform-origin: 50% 100%;
-    -o-transform-origin: 50% 100%;
+    background-color: var(--cinnabar);
     transform-origin: 50% 100%;
 }
 
@@ -416,26 +355,22 @@ a {
     line-height: 0;
     border: 5px solid transparent;
     border-top: none;
-    border-bottom: 15px solid rgba(51, 51, 51, .8);
-}
-
-.sanjiao {
-
+    border-bottom: 15px solid var(--cinnabar);
 }
 
 #hourRotation {
     position: absolute;
     width: 20px;
     height: 20px;
-    left: 190px;
-    top: -10px;
-    background-color: rgba(0, 191, 255, .8);
+    /* 圆球中心精确落在盘面墨线（r=199.5，1px 边框的中心）上，
+       旋转原点与盘面视觉圆心（padding 盒 199,199）完全重合 */
+    left: 189px;
+    top: -10.5px;
+    background-color: rgba(74, 93, 107, .3);
+    border: 2px solid #33424d;
+    box-sizing: border-box;
     border-radius: 50%;
-    -webkit-transform-origin: 50% 210px;
-    -moz-transform-origin: 50% 210px;
-    -ms-transform-origin: 50% 210px;
-    -o-transform-origin: 50% 210px;
-    transform-origin: 50% 210px;
+    transform-origin: 50% 209.5px;
 }
 
 #shichenRotation {
@@ -445,30 +380,25 @@ a {
     left: -20px;
     height: 0px;
     border: 60px solid transparent;
-    border-left: 220px solid darkgreen;
+    border-left: 220px solid var(--cinnabar);
     border-right: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     opacity: .5;
-    /*transform:rotate(190deg);*/
 
-    -webkit-transform-origin: 100% 50%;
     transform-origin: 100% 50%;
 }
 
 #yin-yang {
     width: 96px;
     height: 48px;
-    background: #eee;
-    border-color: #999;
+    background: var(--paper);
+    border-color: var(--ink);
     border-style: solid;
     border-width: 2px 2px 50px 2px;
     border-radius: 100%;
     position: absolute;
     top: 150px;
     left: 150px;
-    -webkit-transform: rotate(110deg);
     transform: rotate(110deg);
 }
 
@@ -477,8 +407,8 @@ a {
     position: absolute;
     top: 50%;
     left: 0;
-    background: #eee;
-    border: 18px solid #999;
+    background: var(--paper);
+    border: 18px solid var(--ink);
     border-radius: 100%;
     width: 12px;
     height: 12px;
@@ -489,9 +419,15 @@ a {
     position: absolute;
     top: 50%;
     left: 50%;
-    background: #999;
-    border: 18px solid #eee;
+    background: var(--ink);
+    border: 18px solid var(--paper);
     border-radius: 100%;
     width: 12px;
     height: 12px;
+}
+
+/* 性能：秒针/时针/时辰针/四气针每秒都在旋转，
+   提升为合成层，避免 tick 时触发整个表盘重绘 */
+#miaoRotation, #hourRotation, #shichenRotation, #siqiShow .siqiRotation {
+    will-change: transform;
 }

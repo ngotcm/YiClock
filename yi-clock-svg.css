@@ -1,0 +1,358 @@
+/* ============================================================
+   YiClock SVG 版样式（宣纸 · 墨色 · 朱砂）
+   ------------------------------------------------------------
+   与 yi-clock.css 的关系：顶栏、运气区、四气小圆盘完全一致；
+   表盘部分由「CSS 几何 hack」（border 三角针、伪元素阴阳图、
+   .time24 绝对定位旋转等约 200 行）替换为约 40 行 SVG 样式，
+   图形结构直接写在 index_svg.html 的内联 <svg> 里。
+   ============================================================ */
+
+:root {
+    /* 色板 */
+    --paper: #f6f1e4;        /* 宣纸底 */
+    --card: #fbf8ef;         /* 米白卡片 */
+    --ink: #2e2a26;          /* 墨色正文 */
+    --ink-soft: #6b645c;     /* 次要墨灰 */
+    --cinnabar: #a63f36;     /* 朱砂 */
+    --indigo: #4a5d6b;       /* 黛蓝 */
+    --pine: #5d7052;         /* 松绿 */
+    --lotus: #8a6d7f;        /* 藕荷 */
+    --slate: #5a6b66;        /* 青灰（经络） */
+    --ring: #efe8d6;         /* 表盘外圈环浅色 */
+    --line: rgba(46, 42, 38, .22);  /* 通用细墨线描边 */
+}
+
+body {
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
+    min-width: 600px;
+    background-color: var(--paper);
+    font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", serif;
+}
+
+body, div {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+#YiClock {
+    position: relative;
+    display: block;
+    margin: 1em auto;
+    width: 560px;
+    height: 730px;
+    background-color: var(--card);
+    border-radius: 8px;
+    /* 细墨线边框（box-shadow 实现，不占布局）+ 淡阴影 */
+    box-shadow: 0 0 0 1px var(--line), 0 4px 16px rgba(46, 42, 38, .12);
+}
+
+#YiClock div#theYunQi, #YiClock div#theDate {
+    position: relative;
+    margin: 0 auto;
+    width: 400px;
+    clear: both;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#YiClock div#theDate {
+    margin: 0 auto;
+    background-color: var(--card);
+    width: 560px;
+    height: 50px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    /* 仅底部一条分隔细线，其余三边与卡片边框重合 */
+    box-shadow: inset 0 -1px 0 var(--line);
+}
+
+#YiClock div#theYunQi {
+    width: 480px;
+    padding-top: 10px;
+}
+
+#theDate div {
+    float: left;
+    line-height: 50px;
+    font-size: 22px;
+}
+
+#theDate span#theYear {
+    margin: 0 .2em;
+    padding: .1em;
+    font-weight: 800;
+    color: var(--cinnabar);
+    border: 1px solid rgba(166, 63, 54, .45);
+    border-radius: 5px;
+}
+
+#theDate .button {
+    margin: 10px .2em;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid rgba(46, 42, 38, .35);
+    border-bottom: 2px solid rgba(46, 42, 38, .5);
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.button:hover {
+    /* 淡朱砂底 */
+    background-color: rgba(166, 63, 54, .08);
+}
+
+/* 朱砂印章式 logo */
+#theDate div#logo {
+    position: relative;
+    float: right;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: var(--cinnabar);
+    font-size: 24px;
+    line-height: 34px;
+    font-weight: 600;
+    color: var(--paper);
+    border-top-right-radius: 8px;
+}
+
+#theDate div#logo:hover {
+    background-color: #94392f;
+}
+
+#logo div {
+    width: 100%;
+    border: none;
+    font-size: 12px;
+    line-height: 15px;
+    color: rgba(246, 241, 228, .8);
+}
+
+#wuYun, #theTime {
+    float: left;
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 800;
+}
+
+#theTime {
+    color: var(--ink-soft);
+    margin-left: 2em;
+    font-size: 16px;
+}
+
+.siqi {
+    position: absolute;
+    top: 45px;
+    left: 40px;
+}
+
+.siqi:before {
+    content: "";
+    position: absolute;
+    font-size: 0;
+    border: 2px solid var(--cinnabar);
+
+    width: 100px;
+    height: 0px;
+    top: 20px;
+    left: -3px;
+}
+
+#zaiQuan:before {
+    border-color: var(--indigo);
+}
+
+#zhuQi:before {
+    border-color: var(--lotus);
+}
+
+#keQi:before {
+    border-color: var(--pine);
+}
+
+#keQi, #zaiQuan {
+    top: 75px;
+}
+
+#zhuQi, #keQi {
+    left: 345px;
+}
+
+#siqiShow {
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    top: 50px;
+    left: 215px;
+    border: 1px solid rgba(46, 42, 38, .55);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+#siqiShow:before, #siqiShow:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 25px;
+    line-height: 0;
+    width: 1px;
+    height: 51px;
+    /* 十字线：暖浅灰 */
+    background-color: #d6d0c2;
+}
+
+#siqiShow:after {
+    transform: rotate(90deg);
+}
+
+#siqiShow .siqiRotation {
+    position: absolute;
+    left: 25px;
+    top: 3px;
+    width: 1px;
+    height: 22px;
+    background: var(--ink);
+    transform-origin: 50% 100%;
+    will-change: transform;
+}
+
+#siqiShow .siqiRotation:before {
+    position: absolute;
+    content: "";
+    left: -4px;
+    top: -8px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--cinnabar);
+    border-radius: 50%;
+    opacity: .7;
+}
+
+#siqiShow #zaiquanRotation:before {
+    background-color: var(--indigo)
+}
+
+#siqiShow #zhuqiRotation:before {
+    background-color: var(--lotus)
+}
+
+#siqiShow #keqiRotation:before {
+    background-color: var(--pine)
+}
+
+/* ============ SVG 表盘（替代旧版约 200 行 CSS 几何 hack） ============ */
+
+#theClockSvg {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    clear: both;
+    /* 与 CSS 版表盘视觉位置等效：top:160px 再减去外圈环超出的 40px */
+    top: 120px;
+    /* 卦名等标签画在表盘外圈（viewBox 之外），允许溢出显示 */
+    overflow: visible;
+}
+
+#theClockSvg text {
+    text-anchor: middle;
+}
+
+#theClockSvg .face {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1;
+}
+
+#theClockSvg .ring {
+    fill: none;
+    stroke: var(--ring);
+    stroke-width: 40;
+}
+
+#theClockSvg .timeNum {
+    font-size: 16px;
+    font-weight: 600;
+    fill: var(--ink);
+}
+
+#theClockSvg .dizhi {
+    font-size: 22px;
+    font-weight: 700;
+    fill: var(--ink);
+}
+
+#theClockSvg .zangfu {
+    font-size: 19px;
+    fill: var(--indigo);
+}
+
+#theClockSvg .jingluo {
+    font-size: 17px;
+    fill: var(--slate);
+}
+
+#theClockSvg .baguaX {
+    font-size: 32px;
+    fill: var(--cinnabar);
+}
+
+#theClockSvg .baguaH {
+    font-size: 26px;
+    fill: var(--ink-soft);
+}
+
+/* 阴阳图：纸色为阴、墨色为阳 */
+#theClockSvg .yin {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 2;
+}
+
+#theClockSvg .yang, #theClockSvg .dotYin {
+    fill: var(--ink);
+}
+
+#theClockSvg .dotYang {
+    fill: var(--paper);
+}
+
+/* 时辰针：朱砂半透明长三角 */
+#theClockSvg #shichenHand {
+    fill: var(--cinnabar);
+    opacity: .5;
+}
+
+/* 小时球：黛蓝半透明 + 深色描边 */
+#theClockSvg #hourHand {
+    fill: var(--indigo);
+    fill-opacity: .3;
+    stroke: #33424d;
+    stroke-width: 2;
+}
+
+/* 秒针 + 箭头：朱砂 */
+#theClockSvg #miaoHand line {
+    stroke: var(--cinnabar);
+    stroke-width: 1;
+}
+
+#theClockSvg #miaoHand polygon {
+    fill: var(--cinnabar);
+}
+
+#theClockSvg .centerDot {
+    fill: none;
+    stroke: var(--cinnabar);
+    stroke-width: 3;
+}

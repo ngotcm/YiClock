@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>YiClock 典鍾 SVG v1.0</title>
+    <script>
+        // 移动端按屏幕宽度整体缩放（桌面浏览器忽略 viewport meta，无影响）
+        var scale = screen.availWidth / 600;
+        document.writeln('<meta name="viewport" content="width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + '">');
+    </script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link href="clock128.png" rel="shortcut icon" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="yi-clock-svg.css"/>
+</head>
+<body>
+<div id="YiClock">
+    <div id="theDate">
+        <a href="//ngotcm.org/">
+            <div id="logo">典鍾網頁版
+                <div>ngotcm.org</div>
+            </div>
+        </a>
+
+        <div id="btYearLess" class="button">&lt;&lt;&lt;</div>
+        <div><span id="theYear"></span>年</div>
+        <div id="btYearIncrease" class="button">&gt;&gt;&gt;</div>
+        <div id="btLinkNeijing" class="button">內經說解</div>
+    </div>
+
+    <div id="theYunQi">
+        <div id="wuYun"></div>
+        <div id="theTime"></div>
+        <div id="siTian" class="siqi"></div>
+        <div id="zhuQi" class="siqi"></div>
+        <div id="zaiQuan" class="siqi"></div>
+        <div id="keQi" class="siqi"></div>
+        <div id="siqiShow">
+            <div id="sitianRotation" class="siqiRotation"></div>
+            <div id="zaiquanRotation" class="siqiRotation"></div>
+            <div id="zhuqiRotation" class="siqiRotation"></div>
+            <div id="keqiRotation" class="siqiRotation"></div>
+        </div>
+    </div>
+
+    <!-- SVG 表盘：viewBox 中心 (240,240)，盘面半径 200，外圈环 40px。
+         全部内容包在 rotate(180) 分组里，与 CSS 版 #theClock 的 rotate(180deg) 等效 -->
+    <svg id="theClockSvg" viewBox="0 0 480 480" width="480" height="480">
+        <g transform="rotate(180 240 240)">
+            <circle class="face" cx="240" cy="240" r="200"/>
+            <!-- 阴阳图（先画，被时辰针覆盖中心部分） -->
+            <g id="yinYang" transform="rotate(110 240 240)">
+                <circle class="yin" cx="240" cy="240" r="48"/>
+                <path class="yang" d="M240 192 A48 48 0 0 1 240 288 A24 24 0 0 1 240 240 A24 24 0 0 0 240 192 Z"/>
+                <circle class="dotYin" cx="240" cy="216" r="6"/>
+                <circle class="dotYang" cx="240" cy="264" r="6"/>
+            </g>
+            <!-- 时辰针：中心为尖、外沿为底的三角（等效旧版 border 三角 hack） -->
+            <polygon id="shichenHand" points="240,240 20,180 20,300"/>
+            <!-- 外圈环（盖在时辰针之上，与旧版 maskLayer 的层叠顺序一致） -->
+            <circle class="ring" cx="240" cy="240" r="220"/>
+            <!-- 24 个时辰刻度由 JS 生成 -->
+            <g id="ticks"></g>
+            <!-- 秒针 + 箭头 -->
+            <g id="miaoHand">
+                <line x1="240" y1="240" x2="240" y2="42"/>
+                <polygon points="240,40 245,55 235,55"/>
+            </g>
+            <!-- 小时球（贴在盘面边缘） -->
+            <circle id="hourHand" cx="240" cy="40" r="10"/>
+            <circle class="centerDot" cx="240" cy="240" r="5"/>
+        </g>
+    </svg>
+</div>
+
+<script type="text/javascript" src="YiClock.js"></script>
+<script type="text/javascript">
+    // ============ 纯原生 JS 驱动，无任何框架依赖 ============
+
+    // ---- 生成 24 个时辰刻度（数据来自 YiClock.js 的 initClockModule） ----
+    // 各文字的半径与 CSS 版 .time24 的几何逐点对应：
+    // 卦名 r≈252（环外）、经络 r≈224（环上）、小时数字 r≈210、地支 r≈172、脏腑 r≈128
+    var ticksHtml = '';
+    $y.initClockModule().clock.forEach(function (t) {
+        ticksHtml += '<g transform="rotate(' + t.rotateV + ' 240 240)">'
+            + '<text class="timeNum" x="240" y="30">' + t.id + '</text>'
+            + (t.dizhi ? '<text class="dizhi" x="240" y="68">' + t.dizhi + '</text>' : '')
+            + (t.zangfu ? '<text class="zangfu" x="240" y="112">' + t.zangfu + '</text>' : '')
+            + (t.jingluo ? '<text class="jingluo" x="240" y="16">' + t.jingluo + '</text>' : '')
+            + (t.baguaX ? '<text class="bagua" x="240" y="-8"><tspan class="baguaX">' + t.baguaX
+                + '</tspan><tspan class="baguaH">' + t.baguaH + '</tspan></text>' : '')
+            + '</g>';
+    });
+    document.getElementById('ticks').innerHTML = ticksHtml;
+
+    // ---- 元素引用（缓存，避免每秒查询） ----
+    var el = function (id) { return document.getElementById(id); };
+    var elTime = el('theTime');
+    var elMiao = el('miaoHand');
+    var elHour = el('hourHand');
+    var elShichen = el('shichenHand');
+
+    // ---- 运气区渲染（年份、五运六气、四气针） ----
+    function showYunqi(t) {
+        el('theYear').textContent = t.tmpYear;
+        el('wuYun').textContent = t.wuyun;
+        el('zhuQi').textContent = t.zhuqi;
+        el('keQi').textContent = t.keqi;
+        el('siTian').textContent = t.show_sitian;
+        el('zaiQuan').textContent = t.show_zaiquan;
+        el('sitianRotation').style.transform = 'rotate(' + (t.sitian_rotation + 180) + 'deg)';
+        el('zaiquanRotation').style.transform = 'rotate(' + (t.zaiquan_rotation + 180) + 'deg)';
+        el('zhuqiRotation').style.transform = 'rotate(' + (t.zhuqi_rotation + 180) + 'deg)';
+        el('keqiRotation').style.transform = 'rotate(' + (t.keqi_rotation + 180) + 'deg)';
+    }
+    showYunqi($y.initClockModule());
+
+    // ---- 每秒 tick：只更新时间文本和 3 根针的 transform ----
+    $y.start(function (t) {
+        elTime.textContent = t.this_day + ' ' + t.this_time;
+        elMiao.setAttribute('transform', 'rotate(' + t.miao_rotation + ' 240 240)');
+        elHour.setAttribute('transform', 'rotate(' + t.zhen_rotation + ' 240 240)');
+        elShichen.setAttribute('transform', 'rotate(' + t.shichen_rotation + ' 240 240)');
+    });
+
+    // ---- 年份切换：立即重算并渲染 ----
+    el('btYearIncrease').addEventListener('click', function () { $y.changeYear(1, showYunqi); });
+    el('btYearLess').addEventListener('click', function () { $y.changeYear(-1, showYunqi); });
+</script>
+</body>
+</html>

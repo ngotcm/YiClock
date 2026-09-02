@@ -1,32 +1,117 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>YiClock v0.2</title>
+    <title>YiClock 典鍾 v1.0</title>
     <meta name="keywords" content="riot,clock">
     <script>
-        var appWidth = 550;
-        var windowWidth = screen.availWidth;
-
-        var scale = windowWidth / appWidth;
-        console.log('scale:', scale);
-
-        var metaScale = '<meta name="viewport" content="width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + '">';
-        console.log(metaScale);
-        document.writeln(metaScale);
+        // 移动端按屏幕宽度整体缩放（桌面浏览器忽略 viewport meta，无影响）
+        var scale = screen.availWidth / 600;
+        document.writeln('<meta name="viewport" content="width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + '">');
     </script>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <link href="clock128.png" rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="clock.css"/>
+    <link rel="stylesheet" type="text/css" href="yi-clock.css"/>
 </head>
 <body>
 <yi-clock></yi-clock>
+
+<!-- 组件模板内联在页面里，file:// 直接双击打开也能正常运行（外部 tag 文件走 fetch，会被 file:// 的 CORS 拦截） -->
+<template id="yi-clock-tag">
+<yi-clock id="YiClock">
+  <div id="theDate">
+    <a href="//ngotcm.org/">
+      <div id="logo">典鍾網頁版
+        <div>ngotcm.org</div>
+      </div>
+    </a>
+
+    <div id="btYearLess" class="button" onclick="{decrase}">&lt;&lt;&lt;</div>
+    <div><span id="theYear">{yiClockData.tmpYear}</span>年</div>
+    <div id="btYearIncrease" class="button" onclick="{incrase}">&gt;&gt;&gt;</div>
+    <div id="btLinkNeijing" class="button">內經說解</div>
+  </div>
+
+  <div id="theYunQi">
+    <div id="wuYun">{yiClockData.wuyun}</div>
+    <div id="theTime">{yiClockData.this_day} {yiClockData.this_time}</div>
+    <div id="siTian" class="siqi">{yiClockData.show_sitian}</div>
+    <div id="zhuQi" class="siqi">{yiClockData.zhuqi}</div>
+    <div id="zaiQuan" class="siqi">{yiClockData.show_zaiquan}</div>
+    <div id="keQi" class="siqi">{yiClockData.keqi}</div>
+    <div id="siqiShow">
+      <div id="sitianRotation" class="siqiRotation" style="transform:rotate({rotation('sitian')}deg)"></div>
+      <div id="zaiquanRotation" class="siqiRotation" style="transform:rotate({rotation('zaiquan')}deg)"></div>
+      <div id="zhuqiRotation" class="siqiRotation" style="transform:rotate({rotation('zhuqi')}deg)"></div>
+      <div id="keqiRotation" class="siqiRotation" style="transform:rotate({rotation('keqi')}deg)"></div>
+    </div>
+  </div>
+  <div id="theClock">
+    <div class="center"></div>
+    <div id="yin-yang"></div>
+    <div id="shichenRotation" style="transform:rotate({rotation('shichen')}deg)"></div>
+    <div class="maskLayer"></div>
+    <div each="{item in yiClockData.clock}" id="time{item.id}" class="time24" style="transform:rotate({item.rotateV}deg)">
+      <div class="timeNum">{item.id}</div>
+      <div if="{item.dizhi}" class="dizhi">{item.dizhi}</div>
+      <div if="{item.zangfu}" class="zangfu">{item.zangfu}</div>
+      <div if="{item.jingluo}" class="jingluo">{item.jingluo}</div>
+      <div if="{item.baguaX}" class="bagua"><span class="x">{item.baguaX}</span><span
+          class="h">{item.baguaH}</span></div>
+    </div>
+    <div id="miaoRotation" style="transform:rotate({rotation('miao')}deg)"></div>
+    <div id="hourRotation" style="transform:rotate({rotation('zhen')}deg)"></div>
+  </div>
+  <script>
+    export default {
+      onBeforeMount(props) {
+        this.yiClockData = props.yiClockData
+      },
+
+      // 模板里各指针的旋转角度
+      rotation(e) {
+        return this.yiClockData[e + '_rotation']
+      },
+
+      onMounted() {
+        // 性能：每秒 tick 只直连更新 4 个元素，不做全组件 update() 重渲染
+        const elTime = this.root.querySelector('#theTime')
+        const elMiao = this.root.querySelector('#miaoRotation')
+        const elHour = this.root.querySelector('#hourRotation')
+        const elShichen = this.root.querySelector('#shichenRotation')
+
+        $y.start((time) => {
+          this.yiClockData = time
+          elTime.textContent = `${time.this_day} ${time.this_time}`
+          elMiao.style.transform = `rotate(${time.miao_rotation}deg)`
+          elHour.style.transform = `rotate(${time.zhen_rotation}deg)`
+          elShichen.style.transform = `rotate(${time.shichen_rotation}deg)`
+        })
+      },
+
+      incrase() { this.changeYear(1) },
+      decrase() { this.changeYear(-1) },
+
+      changeYear(num) {
+        $y.changeYear(num, (time) => {
+          this.yiClockData = time
+          this.update() // 立即渲染，不等下一秒 tick
+        })
+      }
+    }
+  </script>
+</yi-clock>
+</template>
+
 <script type="text/javascript" src="riot+compiler.min.js"></script>
 <script type="text/javascript" src="YiClock.js"></script>
-<script type="riot/tag" src="tags/yi-clock.jsx"></script>
 <script type="text/javascript">
-    riot.mount('yi-clock', {title: 'YiClock', yiClockData: $y.initClockModule()});
+    // 从内联模板编译并挂载组件（riot.compileFromString + inject + mount）
+    var tagString = document.getElementById('yi-clock-tag').innerHTML;
+    var compiled = riot.compileFromString(tagString);
+    riot.inject(compiled.code, 'yi-clock', 'yi-clock.html');
+    riot.mount('yi-clock', { yiClockData: $y.initClockModule() });
 </script>
 </body>
 </html>
